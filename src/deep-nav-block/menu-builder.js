@@ -1,35 +1,3 @@
-import { useBlockProps } from '@wordpress/block-editor';
-
-import { parseMenuItems } from "./dnb-menuitem-parser";
-// import NavigationMenu from './deep-navigation-menu';
-
-export default function Save({ attributes }) {
-    const blockProps = useBlockProps.save();
-
-    // Extract menuTree from attributes
-    const { menuItems } = attributes;
-	const menuTree = parseMenuItems(menuItems);
-	console.log("save function",menuTree);
-    // Fallback message if no menu items are available
-    // if (!menuTree || menuTree.length === 0) {
-    //     return (
-    //         <div {...blockProps}>
-    //             <p>No menu items found.</p>
-    //         </div>
-    //     );
-    // }
-	const menu = NavigationMenu(menuTree);
-	console.log("save function - menu html",menu);
-    // Render the NavigationMenu component
-	return (
-		<div
-                {...blockProps}
-                dangerouslySetInnerHTML={{ __html: menu }}
-            ></div>
-	);
-}
-
-
 function handleItem(item, depth) {
     const hasChildren = item.children && item.children.length > 0;
     const dropdownClass = hasChildren ? 'has-dropdown' : '';
@@ -76,3 +44,5 @@ function NavigationMenu( menuTree ) {
         </nav>
     `;
 }
+
+export { MenuBuilder, HandleItem, NavigationMenu };

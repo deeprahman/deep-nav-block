@@ -1,8 +1,9 @@
 import { useState, useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, Spinner } from '@wordpress/components';
-import { parse } from '@wordpress/block-serialization-default-parser';
+
 import apiFetch from '@wordpress/api-fetch';
+import { parseMenuItems } from "./dnb-menuitem-parser";
 
 export default function Edit({ attributes, setAttributes }) {
 	const [navMenus, setNavMenus] = useState([]);
@@ -36,26 +37,7 @@ export default function Edit({ attributes, setAttributes }) {
 		}
 	}, [selectedNav]);
 
-	// Parse menu content into hierarchical structure
-	const parseMenuItems = (content) => {
-        try {
-            const blocks = parse(content);
-            
-            const buildMenuTree = (blocks) => blocks
-                .filter(block => block.blockName !== null) // Skip blocks where blockName is null
-                .map((block) => ({
-                    id: block.attrs?.id || Date.now(),
-                    title: block.attrs?.label || '',
-                    url: block.attrs?.url || '#',
-                    children: block.innerBlocks ? buildMenuTree(block.innerBlocks) : []
-                }));
-				const menuTree = buildMenuTree(blocks);
-            return menuTree;
-        } catch (error) {
-            console.error('Error parsing menu items:', error);
-            return [];
-        }
-    };
+	
 
 	// Recursive render function for menu items
 	const renderMenu = (items) => (
