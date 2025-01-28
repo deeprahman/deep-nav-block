@@ -1,41 +1,104 @@
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
- */
-import { __ } from '@wordpress/i18n';
+import { useState, useEffect } from '@wordpress/element';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { PanelBody, SelectControl, Spinner } from '@wordpress/components';
+import { parse } from '@wordpress/block-serialization-default-parser';
+import apiFetch from '@wordpress/api-fetch';
 
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
-import { useBlockProps } from '@wordpress/block-editor';
+export default function Edit({ attributes, setAttributes }) {
+	const [navMenus, setNavMenus] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const { selectedNav, menuItems } = attributes;
+	const blockProps = useBlockProps();
 
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
-import './editor.scss';
+	// Fetch available navigation menus
+	useEffect(() => {
+		apiFetch({ path: '/wp/v2/navigation' })
+			.then((menus) => {
+				setNavMenus(menus);
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				console.error('Error fetching navigation:', error);
+				setIsLoading(false);
+			});
+	}, []);
 
-/**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
- * @return {Element} Element to render.
- */
-export default function Edit() {
+	// Fetch specific navigation menu content
+	useEffect(() => {
+		if (selectedNav) {
+			apiFetch({ path: `/dnb/v1/navigation/${selectedNav}` })
+				.then((menu) => {
+					setAttributes({
+						menuItems: menu.data.content || ''
+					});
+				})
+				.catch(console.error);
+		}
+	}, [selectedNav]);
+
+	// Parse menu content into hierarchical structure
+	const parseMenuItems = (content) => {
+        try {
+            const blocks = parse(content);
+            
+            const buildMenuTree = (blocks) => blocks
+                .filter(block => block.blockName !== null) // Skip blocks where blockName is null
+                .map((block) => ({
+                    id: block.attrs?.id || Date.now(),
+                    title: block.attrs?.label || '',
+                    url: block.attrs?.url || '#',
+                    children: block.innerBlocks ? buildMenuTree(block.innerBlocks) : []
+                }));
+				const menuTree = buildMenuTree(blocks);
+            return menuTree;
+        } catch (error) {
+            console.error('Error parsing menu items:', error);
+            return [];
+        }
+    };
+
+	// Recursive render function for menu items
+	const renderMenu = (items) => (
+		<ul>
+			{items.map((item) => (
+				<li key={item.id}>
+					<a href={item.url}>{item.title}</a>
+					{item.children?.length > 0 && renderMenu(item.children)}
+				</li>
+			))}
+		</ul>
+	);
+
+	if (isLoading) return <Spinner />;
+
+	const menuTree = parseMenuItems(menuItems);
+	console.log(menuTree);
 	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Deep Nav Block – hello from the editor!',
-				'deep-nav-block'
-			) }
-		</p>
+		<>
+			<InspectorControls>
+				<PanelBody title="Navigation Settings">
+					<SelectControl
+						label="Select Menu"
+						value={selectedNav}
+						options={[
+							{ label: 'Select a menu...', value: '' },
+							...navMenus.map((menu) => ({
+								label: menu.title.rendered,
+								value: menu.id
+							}))
+						]}
+						onChange={(value) => setAttributes({ selectedNav: Number(value) })}
+					/>
+				</PanelBody>
+			</InspectorControls>
+
+			<nav {...blockProps}>
+				{menuTree.length > 0 ? (
+					renderMenu(menuTree)
+				) : (
+					<p>Select a navigation menu from the sidebar</p>
+				)}
+			</nav>
+		</>
 	);
 }

@@ -1,0 +1,136 @@
+
+
+nav {
+    background: #ffffff;
+    // font-family: Arial, sans-serif;
+    // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: left;
+}
+
+.menu-toggle {
+    display: none;
+    color: #333;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.nav-list,
+.submenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-list li {
+    position: relative;
+}
+
+.nav-list > li {
+    display: inline-block;
+}
+
+.nav-list a {
+    color: #333;
+    text-decoration: none;
+    padding: 15px 15px;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.nav-list a:hover {
+    background: #f0f0f0;
+    color: #2196F3;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    background: #ffffff;
+    min-width: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.submenu .submenu {
+    left: 100%;
+    top: 0;
+}
+
+.has-dropdown > a::after {
+    content: "▼";
+    font-size: 12px;
+    margin-left: 5px;
+    display: inline-block;
+    transition: transform 0.3s;
+    color: #666;
+}
+
+.has-dropdown.active > a::after {
+    transform: rotate(180deg);
+}
+
+.submenu .has-dropdown > a::after {
+    content: "▶";
+}
+
+.submenu .has-dropdown.active > a::after {
+    transform: rotate(90deg);
+}
+
+.nav-list li.active > a {
+    color: #2196F3;
+    background: #f8f9fa;
+}
+
+@media screen and (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-list {
+        display: none;
+        width: 100%;
+        background: #ffffff;
+    }
+
+    .nav-list.active {
+        display: block;
+    }
+
+    .nav-list > li {
+        display: block;
+        border-bottom: 1px solid #eee;
+    }
+
+    .submenu {
+        position: static;
+        background: #f8f9fa;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .submenu li a {
+        padding-left: 40px;
+    }
+
+    .submenu .submenu li a {
+        padding-left: 60px;
+    }
+
+    .submenu .submenu {
+        left: 0;
+        background: #f0f0f0;
+    }
+
+    .nav-list > li:last-child {
+        border-bottom: none;
+    }
+}

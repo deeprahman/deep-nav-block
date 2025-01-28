@@ -3,13 +3,30 @@
 	"apiVersion": 3,
 	"name": "create-block/deep-nav-block",
 	"version": "0.1.0",
-	"title": "Deep Nav Block",
-	"category": "widgets",
-	"icon": "smiley",
-	"description": "Example block scaffolded with Create Block tool.",
-	"example": {},
+	"title": "Deep Navigation",
+	"category": "design",
+	"icon": "menu",
+	"description": "Displays hierarchical navigation menus from WordPress navigation endpoints",
+	"example": {
+		"attributes": {
+			"selectedNav": 1,
+			"menuItems": ""
+		}
+	},
 	"supports": {
-		"html": false
+		"html": false,
+		"align": ["wide", "full"],
+		"anchor": true
+	},
+	"attributes": {
+		"selectedNav": {
+			"type": "number",
+			"default": null
+		},
+		"menuItems": {
+			"type": "string",
+			"default": ""
+		}
 	},
 	"textdomain": "deep-nav-block",
 	"editorScript": "file:./index.js",

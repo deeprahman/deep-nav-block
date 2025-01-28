@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+include_once plugin_dir_path( __FILE__ ) . 'includes/class-dnb-deep-nav-block.php';
+
 /**
  * Registers the block using the metadata loaded from the `block.json` file.
  * Behind the scenes, it registers also all assets so they can be enqueued
@@ -28,3 +30,5 @@ function create_block_deep_nav_block_block_init() {
 	register_block_type( __DIR__ . '/build/deep-nav-block' );
 }
 add_action( 'init', 'create_block_deep_nav_block_block_init' );
+
+$GLOBALS['dnb_deep_nav_block'] = new DNB_Deep_Nav_Block();
