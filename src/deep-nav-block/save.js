@@ -9,17 +9,8 @@ export default function Save({ attributes }) {
     // Extract menuTree from attributes
     const { menuItems } = attributes;
 	const menuTree = parseMenuItems(menuItems);
-	console.log("save function",menuTree);
-    // Fallback message if no menu items are available
-    // if (!menuTree || menuTree.length === 0) {
-    //     return (
-    //         <div {...blockProps}>
-    //             <p>No menu items found.</p>
-    //         </div>
-    //     );
-    // }
 	const menu = NavigationMenu(menuTree);
-	console.log("save function - menu html",menu);
+
     // Render the NavigationMenu component
 	return (
 		<div

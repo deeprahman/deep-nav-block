@@ -4,6 +4,8 @@ import { PanelBody, SelectControl, Spinner } from '@wordpress/components';
 
 import apiFetch from '@wordpress/api-fetch';
 import { parseMenuItems } from "./dnb-menuitem-parser";
+import  NavigationMenu  from "./menu-builder.js";
+
 
 export default function Edit({ attributes, setAttributes }) {
 	const [navMenus, setNavMenus] = useState([]);
@@ -54,7 +56,7 @@ export default function Edit({ attributes, setAttributes }) {
 	if (isLoading) return <Spinner />;
 
 	const menuTree = parseMenuItems(menuItems);
-	console.log(menuTree);
+	
 	return (
 		<>
 			<InspectorControls>
@@ -76,7 +78,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 			<nav {...blockProps}>
 				{menuTree.length > 0 ? (
-					renderMenu(menuTree)
+					<NavigationMenu menuTree={menuTree} />
 				) : (
 					<p>Select a navigation menu from the sidebar</p>
 				)}
