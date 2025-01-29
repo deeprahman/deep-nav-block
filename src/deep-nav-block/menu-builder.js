@@ -1,48 +1,63 @@
-function handleItem(item, depth) {
-    const hasChildren = item.children && item.children.length > 0;
-    const dropdownClass = hasChildren ? 'has-dropdown' : '';
-    let out = `<li class="${dropdownClass}">`;
-    out += `<a href="${item.url}">${item.title}</a>`;
-    if (hasChildren) {
-        out += menuBuilder(item.children, depth + 1);
-    }
-    out += `</li>`;
-    return out;
-}
+import React from 'react';
 
-function menuBuilder(array, depth = 0) {
-    if (!array || array.length === 0) {
-        return '';
-    }
+// MenuItem: Renders individual navigation items and their children recursively
+const MenuItem = ({ item, depth }) => {
+  // Check if the item has children for dropdown functionality
+  const hasChildren = item.children?.length > 0;
+  
+  return (
+    <li className={hasChildren ? 'has-dropdown' : ''}>
+      {/* Render the navigation link */}
+      <a href={item.url}>{item.title}</a>
+      
+      {/* Recursively render child menu items if they exist */}
+      {hasChildren && <MenuBuilder items={item.children} depth={depth + 1} />}
+    </li>
+  );
+};
 
-    // Adjust class names to match the example HTML structure
-    const className = depth > 0 ? 'submenu' : 'nav-list';
-    let out = `<ul class="${className}">`;
+// MenuBuilder: Builds the menu structure recursively
+const MenuBuilder = ({ items, depth = 0 }) => {
+  // Return null if no items are provided
+  if (!items?.length) {
+    return null;
+  }
 
-    for (const item of array) {
-        out += handleItem(item, depth);
-    }
+  // Determine appropriate class name based on menu depth
+  const className = depth > 0 ? 'submenu' : 'nav-list';
+  
+  return (
+    <ul className={className}>
+      {/* Map through items and render MenuItem components */}
+      {items.map((item, index) => (
+        <MenuItem 
+          key={`${item.title}-${index}`}
+          item={item} 
+          depth={depth}
+        />
+      ))}
+    </ul>
+  );
+};
 
-    out += `</ul>`;
-    return out;
-}
-// Navigation Menu component that properly handles the menuTree prop
-function NavigationMenu( menuTree ) {
-    if (!menuTree || !Array.isArray(menuTree)) {
-        return null;
-    }
+// NavigationMenu: Main navigation component that renders the entire menu structure
+const NavigationMenu = ({ menuTree }) => {
+  // Return null if menuTree is invalid
+  if (!menuTree?.length) {
+    return null;
+  }
 
-    const navContainerClass = 'nav-container';
-    const menuToggleClass = 'menu-toggle';
+  return (
+    <nav>
+      <div className="nav-container">
+        {/* Mobile menu toggle button */}
+        <div className="menu-toggle">☰</div>
+        {/* Render the main menu structure */}
+        <MenuBuilder items={menuTree} />
+      </div>
+    </nav>
+  );
+};
 
-    return `
-        <nav>
-            <div class="${navContainerClass}">
-                <div class="${menuToggleClass}">☰</div>
-                ${menuBuilder(menuTree)}
-            </div>
-        </nav>
-    `;
-}
+export default NavigationMenu;
 
-export { MenuBuilder, HandleItem, NavigationMenu };
