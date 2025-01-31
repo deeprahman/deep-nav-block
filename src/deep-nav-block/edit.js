@@ -39,19 +39,7 @@ export default function Edit({ attributes, setAttributes }) {
 		}
 	}, [selectedNav]);
 
-	
 
-	// Recursive render function for menu items
-	const renderMenu = (items) => (
-		<ul>
-			{items.map((item) => (
-				<li key={item.id}>
-					<a href={item.url}>{item.title}</a>
-					{item.children?.length > 0 && renderMenu(item.children)}
-				</li>
-			))}
-		</ul>
-	);
 
 	if (isLoading) return <Spinner />;
 
