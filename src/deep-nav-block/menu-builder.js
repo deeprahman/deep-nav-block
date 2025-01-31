@@ -1,6 +1,17 @@
 import React from 'react';
 
 // MenuItem: Renders individual navigation items and their children recursively
+/**
+ * MenuItem component renders a single menu item and its children recursively.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.item - The menu item object.
+ * @param {string} props.item.title - The title of the menu item.
+ * @param {string} props.item.url - The URL of the menu item.
+ * @param {Array} [props.item.children] - The children of the menu item, if any.
+ * @param {number} props.depth - The depth level of the menu item.
+ * @returns {JSX.Element} The rendered menu item.
+ */
 const MenuItem = ({ item, depth }) => {
   // Check if the item has children for dropdown functionality
   const hasChildren = item.children?.length > 0;
@@ -17,6 +28,14 @@ const MenuItem = ({ item, depth }) => {
 };
 
 // MenuBuilder: Builds the menu structure recursively
+/**
+ * MenuBuilder component that recursively builds a menu structure.
+ *
+ * @param {Object} props - The properties object.
+ * @param {Array} props.items - The array of menu items to be rendered.
+ * @param {number} [props.depth=0] - The current depth of the menu, used to determine class names.
+ * @returns {JSX.Element|null} The rendered menu structure or null if no items are provided.
+ */
 const MenuBuilder = ({ items, depth = 0 }) => {
   // Return null if no items are provided
   if (!items?.length) {
@@ -41,6 +60,13 @@ const MenuBuilder = ({ items, depth = 0 }) => {
 };
 
 // NavigationMenu: Main navigation component that renders the entire menu structure
+/**
+ * NavigationMenu component renders a navigation menu based on the provided menu tree.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array} props.menuTree - The tree structure representing the menu items.
+ * @returns {JSX.Element|null} The rendered navigation menu or null if the menuTree is invalid.
+ */
 const NavigationMenu = ({ menuTree }) => {
   // Return null if menuTree is invalid
   if (!menuTree?.length) {
