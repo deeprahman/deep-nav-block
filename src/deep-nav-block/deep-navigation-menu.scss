@@ -1,9 +1,5 @@
-
-
 nav {
     background: #ffffff;
-    // font-family: Arial, sans-serif;
-    // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
@@ -32,7 +28,7 @@ nav {
     position: relative;
 }
 
-.nav-list > li {
+.nav-list>li {
     display: inline-block;
 }
 
@@ -64,7 +60,7 @@ nav {
     top: 0;
 }
 
-.has-dropdown > a::after {
+.has-dropdown>a::after {
     content: "▼";
     font-size: 12px;
     margin-left: 5px;
@@ -73,24 +69,34 @@ nav {
     color: #666;
 }
 
-.has-dropdown.active > a::after {
+.has-dropdown.active>a::after {
     transform: rotate(180deg);
 }
 
-.submenu .has-dropdown > a::after {
+.submenu .has-dropdown>a::after {
     content: "▶";
 }
 
-.submenu .has-dropdown.active > a::after {
+.submenu .has-dropdown.active>a::after {
     transform: rotate(90deg);
 }
 
-.nav-list li.active > a {
+.nav-list li.active>a {
     color: #2196F3;
     background: #f8f9fa;
 }
 
 @media screen and (max-width: 768px) {
+    .deep-navigation-menu-open {
+        background: #ffffff;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        z-index: 999999999999;
+    }
+
     .menu-toggle {
         display: block;
     }
@@ -105,11 +111,12 @@ nav {
         display: block;
     }
 
-    .nav-list > li {
+    .nav-list>li {
         display: block;
         border-bottom: 1px solid #eee;
     }
 
+    /* Updated submenu styling for mobile */
     .submenu {
         position: static;
         background: #f8f9fa;
@@ -117,12 +124,39 @@ nav {
         border-radius: 0;
     }
 
+    /* First level submenu */
     .submenu li a {
-        padding-left: 40px;
+        padding-left: 2.5rem;
+        position: relative;
     }
 
+    /* Second level submenu */
     .submenu .submenu li a {
-        padding-left: 60px;
+        padding-left: 4rem;
+    }
+
+    /* Third level submenu (if needed) */
+    .submenu .submenu .submenu li a {
+        padding-left: 5.5rem;
+    }
+
+    /* Visual indicator for submenu items */
+    .submenu li a::before {
+        content: "";
+        position: absolute;
+        left: 1.5rem;
+        top: 50%;
+        width: 0.5rem;
+        height: 1px;
+        background: #666;
+    }
+
+    .submenu .submenu li a::before {
+        left: 3rem;
+    }
+
+    .submenu .submenu .submenu li a::before {
+        left: 4.5rem;
     }
 
     .submenu .submenu {
@@ -130,7 +164,7 @@ nav {
         background: #f0f0f0;
     }
 
-    .nav-list > li:last-child {
+    .nav-list>li:last-child {
         border-bottom: none;
     }
 }
