@@ -1,7 +1,29 @@
+/**
+ * Initializes the deep navigation menu functionality.
+ * 
+ * - Toggles the mobile menu visibility.
+ * - Handles dropdown menu interactions and positioning.
+ * - Recalculates dropdown positions on window resize.
+ * - Closes dropdowns when clicking outside the navigation list.
+ * 
+ * @file deep-navigation-menu.js
+ * @version 1.0.0
+ * @since 2025-1-25
+ * 
+ * @listens DOMContentLoaded
+ * @listens click on .menu-toggle
+ * @listens click on dropdown links
+ * @listens resize on window
+ * @listens click on document
+ */
 document.addEventListener('DOMContentLoaded', function() {
     // Toggle mobile menu
     const menuToggle = document.querySelector('.menu-toggle');
     const navList = document.querySelector('.nav-list');
+    /**
+     * The parent element of the element with the class 'nav-container'.
+     * @type {Element}
+     */
     const navElement = document.querySelector('.nav-container').parentElement;
 
     menuToggle.addEventListener('click', function() {
@@ -12,9 +34,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle dropdown menus
     const dropdownItems = document.querySelectorAll('.has-dropdown');
     
+    /**
+     * Calculates and sets the position of a dropdown submenu to prevent overflow.
+     *
+     * This function checks if the submenu would overflow the viewport on the right side.
+     * If it would, and there is enough space on the left, it positions the submenu to the left.
+     * Otherwise, it positions the submenu to the right by default.
+     *
+     * @param {HTMLElement} submenu - The submenu element to position.
+     */
     function calculateDropdownPosition(submenu) {
         const viewportWidth = window.innerWidth;
-        const submenuRect = submenu.getBoundingClientRect();
+        const submenuRect = submenu.getBoundingClientRect();   
         const parentRect = submenu.parentElement.getBoundingClientRect();
         
         // Check if submenu would overflow on the right

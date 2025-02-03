@@ -1,7 +1,6 @@
 import { useState, useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, Spinner } from '@wordpress/components';
-
 import apiFetch from '@wordpress/api-fetch';
 import { parseMenuItems } from "./dnb-menuitem-parser";
 import  NavigationMenu  from "./menu-builder.js";
