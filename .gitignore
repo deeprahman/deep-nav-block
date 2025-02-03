@@ -37,3 +37,6 @@ build/
 
 #Innore sandbox
 sandbox/
+
+#vscode workspace
+*.code-workspace
